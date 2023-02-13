@@ -49,7 +49,8 @@ async def postcard_data(m: Message, d: Dialog, dialog_manager: DialogManager):
         text.append(m.text)
         await m.reply(m.text)
     elif m.content_type == ContentType.PHOTO:
-        text.append(m.caption)
+        if m.caption is not None:
+            text.append(m.caption)
         photos.append(get_id_from_message(m))
     else:
         data.dialog_error = "Нормальная открытка содержит только текст и фото"
