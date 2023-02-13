@@ -23,7 +23,7 @@ async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: Dialog
 
     if len(data.photos):
         await bot.send_photo(SEX_CHAT_ID, data.photos[0],
-                             f"💌 Привет {data.username}! Тебе прислали новую открытку!\n\n{text}",
+                             f"💌 {data.username}, вот что тебе просили передать!\n\n{text}",
                              reply_to_message_id=reply_to)
     else:
         if not len(text):
@@ -31,7 +31,7 @@ async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: Dialog
                                    "@mindsweeper")
             return await dialog_manager.start(Main.menu, mode=StartMode.RESET_STACK)
 
-        await bot.send_message(SEX_CHAT_ID, f"💌 Привет {data.username}! Тебе прислали новую открытку! Вот текст:\n\n{text}",
+        await bot.send_message(SEX_CHAT_ID, f"💌 {data.username}, вот что тебе хотят сказать:\n\n{text}",
                                reply_to_message_id=reply_to)
 
     await dialog_manager.start(Main.sent, mode=StartMode.RESET_STACK)
