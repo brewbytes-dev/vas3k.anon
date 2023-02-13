@@ -1,4 +1,5 @@
 import logging
+import uuid
 from enum import Enum, auto
 from functools import partial
 from itertools import islice, accumulate, chain
@@ -10,12 +11,10 @@ import aiogram.types as types
 import aiogram_dialog.widgets.kbd as adw
 from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.handler import CancelHandler
-from aiogram.types import CallbackQuery, InlineKeyboardButton
 from aiogram.utils import emoji as emj
 from aiogram.utils.exceptions import Throttled
 from aiogram.utils.markdown import hlink
 from aiogram_dialog import DialogManager, StartMode, Data, Dialog
-from aiogram_dialog.widgets.input import MessageInput
 from aiogram_dialog.widgets.kbd import Keyboard
 from aiogram_dialog.widgets.kbd.button import OnClick
 from aiogram_dialog.widgets.kbd.select import get_identity
@@ -23,15 +22,11 @@ from aiogram_dialog.widgets.kbd.state import EventProcessorButton
 from aiogram_dialog.widgets.text import Text
 from aiogram_dialog.widgets.text.multi import Selector
 from aiogram_dialog.widgets.when import WhenCondition, Predicate
-from aiogram_dialog.widgets.widget_event import ensure_event_processor
 
-import handlers.private
+from dialogs.main.states import Main
 from loader import dp
-from src.commands import Emojis
-from src.states import Main, PropertiesView
+from src.emojis import Emojis
 from src.utils import clean_user_fsm
-
-import uuid
 
 logger = logging.getLogger(__name__)
 THROTTLE_RATE = 1
@@ -162,6 +157,7 @@ class Button:
             cls, text: Union[Format, str],
             *,
             click_mode: ClickMode = ClickMode.NORMAL,
+            on_click,
             emoji: Emojis, **kwargs) -> adw.Button:
         if isinstance(text, Format):
             text = text.text
@@ -174,7 +170,7 @@ class Button:
         if 'id' not in kwargs:
             kwargs['id'] = generate_id()
 
-        b = adw.Button(text, **kwargs)
+        b = adw.Button(text, on_click=on_click, **kwargs)
 
         if click_mode == ClickMode.THROTTLED:
             b.process_callback = process_throttle
@@ -224,31 +220,6 @@ async def throttled_main_click(on_click, c: types.CallbackQuery, b: adw.Keyboard
     if on_click:
         await on_click(c, b, m, *args, **kwargs)
 
-
-class ChatPrivate(Keyboard):
-    def __init__(self, chat_name: Text, text: Text, when: WhenCondition = None):
-        from dialogs.chat_access import chat_selected
-        _id = generate_id()
-        super().__init__(_id, when)
-        self.chat_name = chat_name
-        self.text = text
-        self.on_click = ensure_event_processor(chat_selected)
-        self.chat_name_rendered = None
-
-    async def process_callback(self, c: CallbackQuery, dialog: Dialog, manager: DialogManager) -> bool:
-        if c.data != self.widget_id:
-            return False
-        await self.on_click.process_event(c, self, manager, self.chat_name_rendered)
-        return True
-
-    async def _render_keyboard(self, data: Dict, manager: DialogManager) -> List[List[InlineKeyboardButton]]:
-        self.chat_name_rendered = await self.chat_name.render_text(data, manager)
-        return [[
-            InlineKeyboardButton(
-                text=await self.text.render_text(data, manager),
-                callback_data=self.widget_id
-            )
-        ]]
 
 
 class Chat(Keyboard):
@@ -304,30 +275,6 @@ class Start(EventProcessorButton):
         if self.user_on_click:
             await self.user_on_click(c, self, dialog_manager)
         await dialog_manager.start(self.state, mode=self.mode, data=self.data)
-
-
-class AuthorizeById(Start):
-    def __new__(cls, text="Авторизоваться по номеру ЛС", *args, when=None, **kwargs):
-        return Start(
-            Format(text=f'{Emojis.authorize_by_id} {text}'),
-            id='auth',
-            state=PropertiesView.list_view,
-            mode=StartMode.NORMAL,
-            when=when)
-
-
-class SecurityHandler(MessageInput):
-    def __new__(cls, *args, **kwargs):
-        return MessageInput(handlers.private.any_input, content_types=types.ContentType.ANY)
-
-
-class ChangeHouse(Button):
-    def __new__(cls, text="Поменять дом", *args, **kwargs):
-        import dialogs.shared.do
-        return Button(
-            text, emoji=Emojis.change_house,
-            id='change_house', on_click=dialogs.shared.do.show_house_selector_click,
-            *args, **kwargs)
 
 
 class Select:

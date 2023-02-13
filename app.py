@@ -2,9 +2,8 @@ import asyncio
 import logging
 from json import JSONEncoder
 
-import asyncpg
-import sentry_sdk
 from aiogram import exceptions, types
+from aiogram.dispatcher import filters
 from aiogram_dialog import StartMode, DialogManager
 from aiogram_dialog.exceptions import (InvalidStackIdError, UnknownIntent, UnknownState,
                                        InvalidIntentIdError, OutdatedIntent,
@@ -14,14 +13,11 @@ from aiogram_dialog.utils import remove_kbd
 
 import bot_loader
 import dialogs
-from dialogs.main import Main
-from loader import dp, registry, DEFAULT_USER_COMMANDS, DEFAULT_GROUP_COMMANDS
-from middlewares.db import DbMiddleware, setup_db_config
-from src import config
-from src.base import Repo
+from dialogs.main.states import Main
+from loader import dp, registry, DEFAULT_USER_COMMANDS
 from src.utils import clean_user_fsm
 
-sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5)
+# sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5)
 
 logger = logging.getLogger(__name__)
 
@@ -86,26 +82,14 @@ async def skip_error(update: types.Update, exception, *args, **kwargs):
 async def main():
     logger.info("Starting bot")
 
-    async_pool = await asyncpg.create_pool(config.DATABASE_URL)
-    async with async_pool.acquire() as conn:
-        conn = await setup_db_config(conn)
-        _repo = Repo(conn)
-
-    logger.info("DB Middleware setup complete")
-
     await setup_commands()
-
-    # dp.middleware.setup(AlbumMiddleware(latency=1))
-    # dp.register_inline_handler(inline_echo, state='*')
-
     await register_errors_handler()
-    # await register_inline(dp, dbv)
-    # await register_group(dp, dbv)
-    # await register_pulse(dp, dbv)
-    # await register_claims(dp, dbv)
-    # await register_private(dp, dbv)
+
+    PRIVATE_FILTER = filters.ChatTypeFilter(types.ChatType.PRIVATE)
+    dp.register_message_handler(dialogs.main.start, PRIVATE_FILTER,
+                                commands=['start', 'help', 'menu', 'access'], state='*')
+
     await register_registry()
-    dp.setup_middleware(DbMiddleware(async_pool, dp))
 
     try:
         # await dp.skip_updates()
@@ -116,13 +100,9 @@ async def main():
         await bot_loader.bot.session.close()
 
 
-
 async def setup_commands():
     await bot_loader.bot.set_my_commands(DEFAULT_USER_COMMANDS, scope=types.BotCommandScope.from_type(
         types.BotCommandScopeType.ALL_PRIVATE_CHATS))
-
-    await bot_loader.bot.set_my_commands(DEFAULT_GROUP_COMMANDS, scope=types.BotCommandScope.from_type(
-        types.BotCommandScopeType.ALL_GROUP_CHATS))
 
 
 async def register_errors_handler():

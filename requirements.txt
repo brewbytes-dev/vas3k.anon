@@ -9,7 +9,7 @@ asyncpg==0.26.0
 # beautifulsoup4==4.10.0
 # dataclasses-json==0.5.a6
 # dateparser==1.1.1
-# emoji==1.7.0
+emoji==1.7.0
 git+https://github.com/hoodwinker/aiogram_dialog.git@develop
 # jinja2==3.0.2
 # lxml==4.8.0

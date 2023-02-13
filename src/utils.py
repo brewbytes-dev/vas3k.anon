@@ -16,7 +16,6 @@ from aiogram.utils.exceptions import ChatNotFound, BotKicked, BotBlocked, Messag
 from aiogram_dialog.utils import get_chat
 
 from bot_loader import bot
-from loader import scheduler
 from src import config
 
 FSM_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
