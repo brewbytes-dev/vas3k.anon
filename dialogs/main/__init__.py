@@ -16,7 +16,7 @@ dialog = Dialog(
     Window(
         w.Format("Привет! "
                  "Я vas3k bot для отправки анонимных валентинок в чатик Вастрик Секс!\n"
-                 "Пришли мне юзернейм кому хочешь отправить поздравление!"),
+                 "Пришли мне юзернейм кому хочешь отправить поздравление (или просто напиши имя текстом)!"),
         MessageInput(get.user_data, content_types=ContentType.ANY),
         state=Main.menu,
         getter=get.getter,

@@ -6,7 +6,6 @@ from src.utils import get_id_from_message
 
 from dialogs.main.states import Main
 from dialogs.main.parsers import PostCardData
-from src.config import SEX_CHAT_ID
 
 
 async def getter(dialog_manager: DialogManager, **kwargs):
@@ -20,24 +19,10 @@ async def getter(dialog_manager: DialogManager, **kwargs):
 async def user_data(m: Message, d: Dialog, dialog_manager: DialogManager):
     data: PostCardData = PostCardData.register(dialog_manager)
     if not m.text:
+        data.dialog_error = 'Ошибка! Нет текста.'
         return
 
-    if not m.text.startswith("@"):
-        return
-    #
-    if m.text.startswith("https://t.me"):
-        chat_id = m.text.split('/')[-2]
-        if "-100" + str(chat_id) != str(SEX_CHAT_ID):
-            data.dialog_error = 'Эта ссылка не из чата Вастрик.Секс'
-            return
-        data.reply_message_id = m.text.split('/')[-1]
-    elif m.text.startswith("@"):
-        data.username = m.text.strip()
-    else:
-        data.dialog_error = 'Не могу разобрать сообщение'
-        return
-
-    data.dialog_error = ''
+    data.username = m.text.strip()
     await dialog_manager.switch_to(Main.get_postcard)
 
 
