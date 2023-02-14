@@ -19,7 +19,7 @@ from bot_loader import bot
 from src import config
 
 FSM_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-MEDIA = [types.ContentType.DOCUMENT, types.ContentType.PHOTO]
+MEDIA = [types.ContentType.DOCUMENT, types.ContentType.PHOTO, types.ContentType.VIDEO]
 
 
 logger = logging.getLogger(__name__)

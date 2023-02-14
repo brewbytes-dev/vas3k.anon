@@ -1,11 +1,9 @@
-import typing
-
 from aiogram.types import Message, ContentType
 from aiogram_dialog import Dialog, DialogManager
-from src.utils import get_id_from_message
 
-from dialogs.main.states import Main
 from dialogs.main.parsers import PostCardData
+from dialogs.main.states import Main
+from src.utils import get_id_from_message, MEDIA
 
 
 async def getter(dialog_manager: DialogManager, **kwargs):
@@ -32,13 +30,12 @@ async def postcard_data(m: Message, d: Dialog, dialog_manager: DialogManager):
 
     if m.content_type == ContentType.TEXT:
         text.append(m.text)
-        await m.reply(m.text)
-    elif m.content_type == ContentType.PHOTO:
+    elif m.content_type in MEDIA:
         if m.caption is not None:
             text.append(m.caption)
         photos.append(get_id_from_message(m))
     else:
-        data.dialog_error = "Нормальная открытка содержит только текст и фото"
+        data.dialog_error = "Принимаем только текст, фото или видео"
         return
 
     data.dialog_error = ''
@@ -46,5 +43,4 @@ async def postcard_data(m: Message, d: Dialog, dialog_manager: DialogManager):
     data.text = text
     data.photos = photos
 
-    # await m.reply(f"{text=}, {photos=}, {data.reply_message_id=}",)
     await dialog_manager.switch_to(Main.click_send)

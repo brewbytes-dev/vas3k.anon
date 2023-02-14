@@ -14,24 +14,17 @@ logger = logging.getLogger(__name__)
 
 async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: DialogManager):
     data: PostCardData = PostCardData.register(dialog_manager)
-    text = "\n".join(data.text)
-
-    if data.reply_message_id:
-        reply_to = int(data.reply_message_id)
-    else:
-        reply_to = None
+    text = "\n".join(data.text) or None
 
     if len(data.photos):
-        await bot.send_photo(SEX_CHAT_ID, data.photos[0],
-                             f"💌 {data.username}, вот что тебе просили передать!\n\n{text}",
-                             reply_to_message_id=reply_to)
+        await bot.send_photo(SEX_CHAT_ID, data.photos[0], text, has_spoiler=True)
     else:
-        if not len(text):
-            await c.message.answer("Что-то пошло не так, попробуйте заново или напишите разработчику "
+        if text is None:
+            await c.message.answer("Что-то пошло не так, "
+                                   "попробуйте заново или напишите разработчику "
                                    "@mindsweeper")
             return await dialog_manager.start(Main.menu, mode=StartMode.RESET_STACK)
 
-        await bot.send_message(SEX_CHAT_ID, f"💌 {data.username}, вот что тебе хотят сказать:\n\n{text}",
-                               reply_to_message_id=reply_to)
+        await bot.send_message(SEX_CHAT_ID, f"{text}")
 
     await dialog_manager.start(Main.sent, mode=StartMode.RESET_STACK)
