@@ -6,4 +6,3 @@ pydantic==1.10.4
 python-dotenv==0.21.1
 pytz-deprecation-shim==0.1.0.post0
 redis==4.3.4
-SQLAlchemy~=2.0.3
