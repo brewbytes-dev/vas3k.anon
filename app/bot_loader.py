@@ -20,7 +20,7 @@ def _get_version():
     return version
 
 
-class SexyBot(Bot):
+class AnonBot(Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._version = None
@@ -32,4 +32,4 @@ class SexyBot(Bot):
         return self._version
 
 
-bot = SexyBot(config.BOT_TOKEN)
+bot = AnonBot(config.BOT_TOKEN)
