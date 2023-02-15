@@ -1,34 +1,9 @@
-python-dotenv==0.21.1
-pydantic==1.10.4
-# aiohttp==3.8.1
 aiogram==2.25.1
-# aiopriman==0.2.3
-# apscheduler==3.9.1
-# asyncpg==0.26.0
-# babel==2.9.1
-# beautifulsoup4==4.10.0
-# dataclasses-json==0.5.a6
-# dateparser==1.1.1
+aioredis==2.0.1
 emoji==1.7.0
 git+https://github.com/hoodwinker/aiogram_dialog.git@develop
-# jinja2==3.0.2
-# lxml==4.8.0
-# more-itertools==8.12.0
-# multidict==5.1.0
-# phonenumbers==8.12.19
-# pillow==8.3.1
-# pyairtable==1.0.0.post1
-# pynacl==1.4.0
-# python-dateutil==2.8.1
-# python-slugify==6.1.2
-# pytz==2022.2.1
+pydantic==1.10.4
+python-dotenv==0.21.1
 pytz-deprecation-shim==0.1.0.post0
 redis==4.3.4
-# requests==2.25.1
-sentry-sdk==1.5.4
-ujson==4.0.2
-# urlextract==1.5.0
-# validators==0.18.2
-aioredis==2.0.1
-
 SQLAlchemy~=2.0.3

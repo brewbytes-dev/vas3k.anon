@@ -16,7 +16,7 @@ async def start(message: Message, dialog_manager: DialogManager):
 dialog = Dialog(
     Window(
         w.Format("Привет! "
-                 "Я vas3k bot для отправки анонимных сообщений в чатик Вастрик.Секс!\n"
+                 "Я vas3k bot [{bot_version}] для отправки анонимных сообщений в чатик Вастрик.Секс!\n"
                  "Пришли мне вопрос или фото (я его спрячу под спойлер) и я анонимно отправлю в чатик",
                  err_prefix=True),
         MessageInput(get.postcard_data, content_types=ContentType.ANY),

@@ -2,8 +2,7 @@ import asyncio
 import logging
 import os
 import typing
-from contextlib import suppress
-from datetime import timezone, datetime, timedelta
+from datetime import timezone, datetime
 from hashlib import blake2b
 from io import BytesIO
 
@@ -20,6 +19,9 @@ from src import config
 
 FSM_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 MEDIA = [types.ContentType.DOCUMENT, types.ContentType.PHOTO, types.ContentType.VIDEO]
+ALL_MEDIA = {types.ContentType.PHOTO: types.InputMediaPhoto,
+             types.ContentType.VIDEO: types.InputMediaVideo,
+             types.ContentType.DOCUMENT: types.InputMediaDocument}
 
 
 logger = logging.getLogger(__name__)
@@ -318,33 +320,6 @@ async def hidden_user(dialog_manager):
     return privacy_error
 
 
-ALL_MEDIA = {types.ContentType.PHOTO: types.InputMediaPhoto,
-             types.ContentType.VIDEO: types.InputMediaVideo,
-             types.ContentType.DOCUMENT: types.InputMediaDocument}
-
-
-def schedule_interval_job(function, args: tuple, job_id, minutes: int = 30):
-    with suppress(Exception):
-        scheduler.remove_job(job_id)
-
-    scheduler.add_job(function, "interval", id=job_id, minutes=minutes, args=args)
-
-
-def schedule_job(function, args: tuple, job_id, delta: timedelta = None, time: datetime = None):
-    if delta:
-        scheduled_date = moscow_time(datetime.now()) + delta
-    elif time:
-        scheduled_date = time
-    else:
-        raise RuntimeError('No date specified')
-
-    with suppress(Exception):
-        scheduler.remove_job(job_id)
-
-    scheduler.add_job(function, "date", id=job_id, run_date=scheduled_date, args=args)
-    return scheduled_date
-
-
 def get_repo(dialog_manager):
     repo = dialog_manager.data['repo']
     return repo
@@ -374,7 +349,6 @@ def thread_to_message_2(chat_id, chat_post_id, comment_id):
 
 
 def channel_comments(channel_id, channel_post_id, chat_message_id):
-    "https://t.me/liner_pulse/53?comment=4"
     chat_id = str(channel_id).replace('-100', '')
     comments_url = f'https://t.me/{chat_id}/{channel_post_id}?comment={chat_message_id}'
     return comments_url
