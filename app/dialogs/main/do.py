@@ -21,7 +21,10 @@ async def on_start_postcard(start_data, dialog_manager: DialogManager):
 
 async def change_author(c: CallbackQuery, select: Select, dialog_manager: DialogManager, item_id: str):
     data: PostCardData = PostCardData.register(dialog_manager)
-    data.content_author = content_author_selector[int(item_id)][0]
+    if int(item_id) == 0:
+        data.content_author = None
+    else:
+        data.content_author = content_author_selector[int(item_id)][0]
 
 
 async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: DialogManager):
