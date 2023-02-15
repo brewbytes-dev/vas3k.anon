@@ -7,7 +7,7 @@ from aiogram.types import BotCommand
 from aiogram_dialog import DialogRegistry
 
 from bot_loader import bot
-from src import config
+from app import config
 
 DEFAULT_USER_COMMANDS = [
         BotCommand(command="menu", description="Главное меню"),

@@ -15,7 +15,7 @@ from aiogram.utils.exceptions import ChatNotFound, BotKicked, BotBlocked, Messag
 from aiogram_dialog.utils import get_chat
 
 from bot_loader import bot
-from src import config
+from app import config
 
 FSM_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 MEDIA = [types.ContentType.DOCUMENT, types.ContentType.PHOTO, types.ContentType.VIDEO]

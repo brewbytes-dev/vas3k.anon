@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.dataparser import DataParser
+from app.dataparser import DataParser
 
 
 @dataclass

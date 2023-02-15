@@ -8,14 +8,12 @@ from aiogram_dialog import StartMode, DialogManager
 from aiogram_dialog.exceptions import (InvalidStackIdError, UnknownIntent, UnknownState,
                                        InvalidIntentIdError, OutdatedIntent,
                                        DialogStackOverflow)
-# TODO: add this to library # from aiogram_dialog.exceptions import UnknownStateGroup
 from aiogram_dialog.utils import remove_kbd
 
-import bot_loader
-import dialogs
-from dialogs.main.states import Main
-from loader import dp, registry, DEFAULT_USER_COMMANDS
-from src.utils import clean_user_fsm
+from app import dialogs, bot_loader
+from app.dialogs.main.states import Main
+from app.loader import dp, registry, DEFAULT_USER_COMMANDS
+from app.utils import clean_user_fsm
 
 # sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5)
 

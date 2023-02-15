@@ -3,11 +3,11 @@ import logging
 from aiogram.types import CallbackQuery
 from aiogram_dialog import DialogManager, StartMode
 
-from bot_loader import bot
-from dialogs.main.states import Main
-from dialogs.main.parsers import PostCardData
-from src.config import SEX_CHAT_ID
-from extensions.widgets import Button
+from app.bot_loader import bot
+from app.dialogs.main.states import Main
+from app.dialogs.main.parsers import PostCardData
+from app.config import SEX_CHAT_ID
+from app.extensions.widgets import Button
 
 logger = logging.getLogger(__name__)
 

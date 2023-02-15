@@ -3,8 +3,8 @@ from aiogram_dialog import Dialog, DialogManager, Window, StartMode
 from aiogram_dialog.widgets.input import MessageInput
 from aiogram_dialog.widgets.when import when_not
 
-import extensions.widgets as w
-from src.emojis import Emojis
+import app.extensions.widgets as w
+from app.extensions.emojis import Emojis
 from . import get, do
 from .states import Main
 

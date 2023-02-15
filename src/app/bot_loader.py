@@ -3,7 +3,7 @@ from pathlib import Path
 
 from aiogram import Bot
 
-from src import config
+from app import config
 
 __all__ = ['bot']
 

@@ -23,10 +23,10 @@ from aiogram_dialog.widgets.text import Text
 from aiogram_dialog.widgets.text.multi import Selector
 from aiogram_dialog.widgets.when import WhenCondition, Predicate
 
-from dialogs.main.states import Main
-from loader import dp
-from src.emojis import Emojis
-from src.utils import clean_user_fsm
+from app.dialogs.main.states import Main
+from app.loader import dp
+from app.extensions.emojis import Emojis
+from app.utils import clean_user_fsm
 
 logger = logging.getLogger(__name__)
 THROTTLE_RATE = 1

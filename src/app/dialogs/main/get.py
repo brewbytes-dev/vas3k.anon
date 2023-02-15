@@ -1,10 +1,10 @@
 from aiogram.types import Message, ContentType
 from aiogram_dialog import Dialog, DialogManager
 
-from bot_loader import bot
-from dialogs.main.parsers import PostCardData
-from dialogs.main.states import Main
-from src.utils import get_id_from_message, MEDIA
+from app.bot_loader import bot
+from app.dialogs.main.parsers import PostCardData
+from app.dialogs.main.states import Main
+from app.utils import get_id_from_message, MEDIA
 
 
 async def getter(dialog_manager: DialogManager, **kwargs):
