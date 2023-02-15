@@ -42,7 +42,7 @@ dialog = Dialog(
         getter=get.getter,
     ),
     Window(
-        w.Format("Все готово! Отправляем в чатик?", err_prefix=True),
+        w.Format("Все готово! Для отправки в чат нажми на кнопку «Отправляем!». Если ты ошибся, просто отправь новое сообщение или нажми кнопку «В главное меню» ", err_prefix=True),
         MessageInput(get.postcard_data, content_types=ContentType.ANY),
         *MineOrNot,
         w.Button("Отправляем!", on_click=do.postcard_send, emoji=Emojis.mail),
