@@ -11,6 +11,7 @@ class PostCardData(DataParser):
     message_id = None
     text = None
     photos = None
+    content_author = None
 
     def __post_init__(self):
         self.messages = []

@@ -7,10 +7,20 @@ from app.dialogs.main.parsers import PostCardData
 from app.dialogs.main.states import Main
 from app.utils import get_id_from_message, MEDIA
 
+content_author_selector = (
+    ("<пусто>", 0),
+    ('#не_моё', 1),
+    ('#моё', 2)
+)
+
 
 async def getter(dialog_manager: DialogManager, **kwargs):
     data: PostCardData = PostCardData.register(dialog_manager)
+
     return {
+        "content_author_selector": content_author_selector,
+        "content_author": data.content_author,
+        "photo_type": bool(data.photos),
         "bot_name": BOT_NAME,
         "chat_name": CHAT_NAME,
         "bot_version": bot.version,

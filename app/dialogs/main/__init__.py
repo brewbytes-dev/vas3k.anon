@@ -1,12 +1,30 @@
+import operator
+
 from aiogram.types import Message, ContentType
 from aiogram_dialog import Dialog, DialogManager, Window, StartMode
 from aiogram_dialog.widgets.input import MessageInput
+from aiogram_dialog.widgets.kbd import Radio
 from aiogram_dialog.widgets.when import when_not
 
 import app.extensions.widgets as w
 from app.extensions.emojis import Emojis
 from . import get, do
 from .states import Main
+
+MineOrNot = (
+    w.Format("\nЭто фото сделано вами или из сети?",
+             when="photo_type"
+             ),
+    Radio(
+        w.Format("🔘 {item[0]}"),  # E.g `🔘 Apple`
+        w.Format("⚪️ {item[0]}"),
+        id="r_ct",
+        item_id_getter=operator.itemgetter(1),
+        items="content_author_selector",
+        when="photo_type",
+        on_click=do.change_author,
+    ),
+)
 
 
 async def start(message: Message, dialog_manager: DialogManager):
@@ -26,6 +44,7 @@ dialog = Dialog(
     Window(
         w.Format("Все готово! Отправляем в чатик?", err_prefix=True),
         MessageInput(get.postcard_data, content_types=ContentType.ANY),
+        *MineOrNot,
         w.Button("Отправляем!", on_click=do.postcard_send, emoji=Emojis.mail),
         w.MainMenu(),
         state=Main.click_send,
@@ -35,8 +54,10 @@ dialog = Dialog(
         w.Format("Ушло!", when=when_not("dialog_error")),
         w.Format("{dialog_error}", when="dialog_error"),
         MessageInput(get.postcard_data, content_types=ContentType.ANY),
+        *MineOrNot,
         w.MainMenu(),
         state=Main.sent,
         getter=get.getter,
     ),
+    on_start=do.on_start_postcard,
 )
