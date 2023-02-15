@@ -23,6 +23,10 @@ class DataParser:
         inst._fetch(data)
         return inst
 
+    def clean(self):
+        inst = type(self)()
+        self.update((inst,))
+
     def update(self, data: typing.Tuple):
         for data_dict in data:
             if data_dict is None:

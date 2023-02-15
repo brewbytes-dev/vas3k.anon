@@ -25,6 +25,7 @@ dialog = Dialog(
     ),
     Window(
         w.Format("Все готово! Отправляем в чатик?", err_prefix=True),
+        MessageInput(get.postcard_data, content_types=ContentType.ANY),
         w.Button("Отправляем!", on_click=do.postcard_send, emoji=Emojis.mail),
         w.MainMenu(),
         state=Main.click_send,

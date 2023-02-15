@@ -26,6 +26,7 @@ async def user_data(m: Message, d: Dialog, dialog_manager: DialogManager):
 
 async def postcard_data(m: Message, d: Dialog, dialog_manager: DialogManager):
     data: PostCardData = PostCardData.register(dialog_manager)
+    data.clean()
     text, photos, messages = data.text, data.photos, data.messages
 
     if m.content_type == ContentType.TEXT:
