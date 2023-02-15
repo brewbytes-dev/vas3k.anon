@@ -6,7 +6,6 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 REDIS_URL = os.getenv('REDIS_URL')
-DEVELOPER = os.getenv('DEVELOPER_ID')
 CHAT_ID = os.getenv('CHAT_ID')
 CHAT_NAME = os.getenv('CHAT_NAME')
 BOT_NAME = os.getenv('BOT_NAME')
