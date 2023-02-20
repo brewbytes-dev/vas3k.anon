@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+SENTRY_DSN = os.getenv('SENTRY_DSN')
 REDIS_URL = os.getenv('REDIS_URL')
 CHAT_ID = os.getenv('CHAT_ID')
 CHAT_NAME = os.getenv('CHAT_NAME')

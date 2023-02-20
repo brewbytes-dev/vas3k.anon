@@ -2,6 +2,7 @@ import asyncio
 import logging
 from json import JSONEncoder
 
+import sentry_sdk
 from aiogram import exceptions, types
 from aiogram.dispatcher import filters
 from aiogram_dialog import StartMode, DialogManager
@@ -10,12 +11,13 @@ from aiogram_dialog.exceptions import (InvalidStackIdError, UnknownIntent, Unkno
                                        DialogStackOverflow)
 from aiogram_dialog.utils import remove_kbd
 
-from app import dialogs, bot_loader
+from app import dialogs, bot_loader, config
 from app.dialogs.main.states import Main
 from app.loader import dp, registry, DEFAULT_USER_COMMANDS
 from app.utils import clean_user_fsm
 
-# sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5)
+if config.SENTRY_DSN:
+    sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5)
 
 logger = logging.getLogger(__name__)
 
