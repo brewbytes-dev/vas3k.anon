@@ -31,10 +31,11 @@ async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: Dialog
     data: PostCardData = PostCardData.register(dialog_manager)
     text = "\n".join(data.text) or None
 
-    if len(data.photos):
+    if len(data.medias):
         if data.content_author:
             text = text or "" + '\n' + data.content_author
-        await bot.send_photo(CHAT_ID, data.photos[0], text, has_spoiler=True)
+        await bot.copy_message(CHAT_ID, c.from_user.id, data.message_id,
+                               caption=text, has_spoiler=True)
     else:
         if text is None:
             await c.message.answer("Что-то пошло не так, "

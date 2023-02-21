@@ -13,7 +13,7 @@ from .states import Main
 
 MineOrNot = (
     w.Format("\nЭто фото сделано вами или из сети?",
-             when="photo_type"
+             when="m_type"
              ),
     Radio(
         w.Format("🔘 {item[0]}"),  # E.g `🔘 Apple`
@@ -21,7 +21,7 @@ MineOrNot = (
         id="r_ct",
         item_id_getter=operator.itemgetter(1),
         items="content_author_selector",
-        when="photo_type",
+        when="m_type",
         on_click=do.change_author,
     ),
 )

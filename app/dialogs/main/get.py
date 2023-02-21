@@ -5,7 +5,7 @@ from app.bot_loader import bot
 from app.config import CHAT_NAME, BOT_NAME
 from app.dialogs.main.parsers import PostCardData
 from app.dialogs.main.states import Main
-from app.utils import get_id_from_message, MEDIA
+from app.utils import get_id_from_message, ALL_MEDIA
 
 content_author_selector = (
     ("<пусто>", 0),
@@ -20,7 +20,7 @@ async def getter(dialog_manager: DialogManager, **kwargs):
     return {
         "content_author_selector": content_author_selector,
         "content_author": data.content_author,
-        "photo_type": bool(data.photos),
+        "m_type": bool(data.medias),
         "bot_name": BOT_NAME,
         "chat_name": CHAT_NAME,
         "bot_version": bot.version,
@@ -42,11 +42,11 @@ async def user_data(m: Message, d: Dialog, dialog_manager: DialogManager):
 async def postcard_data(m: Message, d: Dialog, dialog_manager: DialogManager):
     data: PostCardData = PostCardData.register(dialog_manager)
     data.clean()
-    text, photos, messages = data.text, data.photos, data.messages
+    text, photos, messages = data.text, data.medias, data.messages
 
     if m.content_type == ContentType.TEXT:
         text.append(m.text)
-    elif m.content_type in MEDIA:
+    elif m.content_type in ALL_MEDIA:
         if m.caption is not None:
             text.append(m.caption)
         photos.append(get_id_from_message(m))
@@ -57,6 +57,6 @@ async def postcard_data(m: Message, d: Dialog, dialog_manager: DialogManager):
     data.dialog_error = ''
     data.message_id = m.message_id
     data.text = text
-    data.photos = photos
+    data.medias = photos
 
     await dialog_manager.switch_to(Main.click_send)

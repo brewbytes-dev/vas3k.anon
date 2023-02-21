@@ -21,7 +21,8 @@ FSM_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 MEDIA = [types.ContentType.DOCUMENT, types.ContentType.PHOTO, types.ContentType.VIDEO]
 ALL_MEDIA = {types.ContentType.PHOTO: types.InputMediaPhoto,
              types.ContentType.VIDEO: types.InputMediaVideo,
-             types.ContentType.DOCUMENT: types.InputMediaDocument}
+             types.ContentType.DOCUMENT: types.InputMediaDocument,
+             types.ContentType.ANIMATION: types.Animation}
 
 
 logger = logging.getLogger(__name__)

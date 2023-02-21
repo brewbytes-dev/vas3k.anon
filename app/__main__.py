@@ -83,7 +83,7 @@ async def main():
     logger.info("Starting bot")
 
     await setup_commands()
-    await register_errors_handler()
+    # await register_errors_handler()
 
     PRIVATE_FILTER = filters.ChatTypeFilter(types.ChatType.PRIVATE)
     dp.register_message_handler(dialogs.main.start, PRIVATE_FILTER,
@@ -92,7 +92,7 @@ async def main():
     await register_registry()
 
     try:
-        # await dp.skip_updates()
+        await dp.skip_updates()
         await dp.start_polling()
     finally:
         await dp.storage.close()
