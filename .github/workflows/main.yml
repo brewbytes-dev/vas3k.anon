@@ -18,14 +18,9 @@ jobs:
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@46.101.228.44:22/vas3kanon'
+          git_remote_url: ${{ secrets.REMOTE_URL_ANON }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Create deployment
         uses: "JamesIves/github-pages-deploy-action@releases/v4"
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BASE_BRANCH: "main"
-          BRANCH: "master"
-          FOLDER: ""
-          ENVIRONMENT: "production"
-          TARGET_URL: ""
+          folder: "."
