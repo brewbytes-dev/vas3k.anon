@@ -20,3 +20,12 @@ jobs:
         with:
           git_remote_url: 'ssh://dokku@46.101.228.44:22/vas3kanon'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Create deployment
+        uses: "JamesIves/github-pages-deploy-action@releases/v4"
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BASE_BRANCH: "main"
+          BRANCH: "master"
+          FOLDER: ""
+          ENVIRONMENT: "production"
+          TARGET_URL: ""
