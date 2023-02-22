@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Deploy to Dokku
-        uses: dokku/action@master
+        uses: appleboy/ssh-action@master
         with:
           dokku-host: 46.101.228.44
           dokku-ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
