@@ -20,7 +20,3 @@ jobs:
         with:
           git_remote_url: ${{ secrets.REMOTE_URL_ANON }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Create deployment
-        uses: "JamesIves/github-pages-deploy-action@releases/v4"
-        with:
-          folder: "."
