@@ -1,0 +1,20 @@
+name: Deploy to Dokku
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Dokku
+        uses: dokku/action@master
+        with:
+          dokku-host: 46.101.228.44
+          dokku-ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          dokku-app-name: vas3kanon
+          args: |
+            git push dokku main:master
