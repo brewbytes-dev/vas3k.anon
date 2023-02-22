@@ -1,4 +1,5 @@
-name: Deploy to Dokku
+---
+name: 'deploy to dokku'
 
 on:
   push:
@@ -8,15 +9,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Deploy to Dokku
-        uses: appleboy/ssh-action@master
+      - name: Cloning repo
+        uses: actions/checkout@v3
         with:
-          dokku-host: 46.101.228.44
-          dokku-ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dokku-app-name: vas3kanon
-          args: |
-            git push dokku main:master
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@46.101.228.44:22/vas3kanon'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
