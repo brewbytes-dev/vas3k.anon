@@ -40,7 +40,7 @@ class DataParser:
                     super().__setattr__(key, value)
 
                 if self.dialog_manager:
-                    self.dialog_manager.current_context().dialog_data[key] = value
+                    self.dialog_manager.dialog_data[key] = value
 
     def _fetch(self, data=None):
         dialog_data = None
@@ -49,7 +49,7 @@ class DataParser:
             if data:
                 dialog_data = data
         else:
-            dialog_data = self.dialog_manager.current_context().dialog_data
+            dialog_data = self.dialog_manager.dialog_data
 
         if dialog_data is not None:
             for key, value in dialog_data.items():
@@ -68,7 +68,7 @@ class DataParser:
             self._fetch()
 
             if self.dialog_manager:
-                self.dialog_manager.current_context().dialog_data[key] = value
+                self.dialog_manager.dialog_data[key] = value
         super().__setattr__(key, value)
 
     def pop(self, item):

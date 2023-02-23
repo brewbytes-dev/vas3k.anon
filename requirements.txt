@@ -1,7 +1,7 @@
-aiogram==2.25.1
+aiogram==3.0.0b7
 aioredis==2.0.1
 emoji==1.7.0
-git+https://github.com/hoodwinker/aiogram_dialog.git@develop
+aiogram_dialog==2.0.0b16
 pydantic==1.10.4
 python-dotenv==0.21.1
 pytz-deprecation-shim==0.1.0.post0

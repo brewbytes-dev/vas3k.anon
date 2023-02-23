@@ -12,6 +12,8 @@ class PostCardData(DataParser):
     text = None
     medias = None
     content_author = None
+    content_type = None
+    sent_url = None
 
     def __post_init__(self):
         self.messages = []
