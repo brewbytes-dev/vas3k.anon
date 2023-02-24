@@ -20,3 +20,9 @@ jobs:
         with:
           git_remote_url: ${{ secrets.REMOTE_URL_ANON }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Push to dobrobot
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: ${{ secrets.REMOTE_URL_DOBROBOT }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
