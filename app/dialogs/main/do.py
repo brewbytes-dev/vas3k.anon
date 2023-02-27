@@ -55,5 +55,6 @@ async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: Dialog
     else:
         sent = await bot.send_message(CHAT_ID, text)
 
-    sent_url = f"https://t.me/c/{CHAT_ID.replace('-100', '')}/{sent.message_id}"
-    await dialog_manager.start(Main.sent, mode=StartMode.RESET_STACK, data={"sent_url": sent_url})
+    await dialog_manager.start(Main.sent,
+                               mode=StartMode.RESET_STACK,
+                               data={"sent_url": sent.get_url()})
