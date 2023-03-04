@@ -9,20 +9,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      REMOTE_URL: ${{ secrets.REMOTE_URL_ANON }}
     steps:
       - name: Cloning repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v2
 
       - name: Set remote URL
         run: |
           if [ "$GITHUB_REF" == "refs/heads/main" ]
           then
-            echo "::set-env name=REMOTE_URL::${{ secrets.REMOTE_URL_ANON }}"
+            echo "REMOTE_URL=${{ secrets.REMOTE_URL_ANON }}" >> $GITHUB_ENV
           elif [ "$GITHUB_REF" == "refs/heads/dobrobot" ]
           then
-            echo "::set-env name=REMOTE_URL::${{ secrets.REMOTE_URL_DOBROBOT }}"
+            echo "REMOTE_URL=${{ secrets.REMOTE_URL_DOBROBOT }}" >> $GITHUB_ENV
           else
             echo "Invalid branch"
             exit 1
