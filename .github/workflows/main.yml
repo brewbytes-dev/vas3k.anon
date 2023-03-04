@@ -1,10 +1,10 @@
----
 name: 'deploy to dokku'
 
 on:
   push:
     branches:
       - main
+      - dobrobot
 
 jobs:
   deploy:
@@ -15,14 +15,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set remote URL
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/main" ]
+          then
+            echo "::set-env name=REMOTE_URL::${{ secrets.REMOTE_URL_ANON }}"
+          elif [ "$GITHUB_REF" == "refs/heads/dobrobot" ]
+          then
+            echo "::set-env name=REMOTE_URL::${{ secrets.REMOTE_URL_DOBROBOT }}"
+          else
+            echo "Invalid branch"
+            exit 1
+          fi
+
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: ${{ secrets.REMOTE_URL_ANON }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Push to dobrobot
-        uses: dokku/github-action@master
-        with:
-          git_remote_url: ${{ secrets.REMOTE_URL_DOBROBOT }}
+          git_remote_url: ${{ env.REMOTE_URL }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
