@@ -8,7 +8,7 @@ from app.bot_loader import bot
 from app.dialogs.main.states import Main
 from app.dialogs.main.parsers import PostCardData
 from app.dialogs.main.get import content_author_selector
-from app.config import CHAT_ID
+from app.config import CHAT_ID, CHAT_AAA_ID
 from app.extensions.widgets import Button
 from app.utils import ALL_MEDIA, Forwarder
 
@@ -32,12 +32,12 @@ async def change_author(c: CallbackQuery, select: Select, dialog_manager: Dialog
         data.content_author = content_author_selector[int(item_id)][0]
 
 
-async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: DialogManager):
+async def _postcard_send(c: CallbackQuery, dialog_manager: DialogManager, chat_id):
     data: PostCardData = PostCardData.register(dialog_manager)
     text = "\n".join(data.text) or None
 
     if data.content_type == ContentType.POLL:
-        sent = await bot.copy_message(CHAT_ID, c.message.chat.id, data.message_id)
+        sent = await bot.copy_message(chat_id, c.message.chat.id, data.message_id)
     elif data.content_type in ALL_MEDIA:
         if data.content_author:
             text = (text or "" + '\n' + data.content_author) or None
@@ -47,14 +47,22 @@ async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: Dialog
         if fwder.spoilering:
             kwargs.update({"has_spoiler": True})
 
-        sent = await fwder.sender(CHAT_ID, data.medias[0], **kwargs)
+        sent = await fwder.sender(chat_id, data.medias[0], **kwargs)
     elif text is None:
         sent = await c.message.answer("Что-то пошло не так, "
                                       "попробуйте заново или напишите разработчику "
                                       "@mindsweeper")
     else:
-        sent = await bot.send_message(CHAT_ID, text)
+        sent = await bot.send_message(chat_id, text)
 
     await dialog_manager.start(Main.sent,
                                mode=StartMode.RESET_STACK,
                                data={"sent_url": sent.get_url()})
+
+
+async def postcard_send(c: CallbackQuery, button: Button, dialog_manager: DialogManager):
+    await _postcard_send(c, dialog_manager, CHAT_ID)
+
+
+async def postcard_send_aaa(c: CallbackQuery, button: Button, dialog_manager: DialogManager):
+    await _postcard_send(c, dialog_manager, CHAT_AAA_ID)

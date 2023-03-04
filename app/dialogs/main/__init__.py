@@ -48,10 +48,11 @@ dialog = Dialog(
         getter=get.getter,
     ),
     Window(
-        w.Format("Все готово! Отправляем в чатик?", err_prefix=True),
+        w.Format("Все готово! Куда отправляем?", err_prefix=True),
         MessageInput(get.postcard_data, content_types=ContentType.ANY),
         *MineOrNot,
-        w.Button("Отправляем!", on_click=do.postcard_send, emoji=Emojis.mail),
+        w.Button("Доброчат", on_click=do.postcard_send, emoji=Emojis.dobrochat),
+        w.Button("Поорать", on_click=do.postcard_send_aaa, emoji=Emojis.aaachat),
         w.MainMenu(),
         state=Main.click_send,
         getter=get.getter,
