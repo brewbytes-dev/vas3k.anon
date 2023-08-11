@@ -1,28 +1,37 @@
----
 name: 'deploy to dokku'
 
 on:
   push:
     branches:
       - main
+      - dobrobot
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      REMOTE_URL: ${{ secrets.REMOTE_URL_ANON }}
     steps:
       - name: Cloning repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v2
+
+      - name: Set remote URL
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/main" ]
+          then
+            echo "REMOTE_URL=${{ secrets.REMOTE_URL_ANON }}" >> $GITHUB_ENV
+          elif [ "$GITHUB_REF" == "refs/heads/dobrobot" ]
+          then
+            echo "REMOTE_URL=${{ secrets.REMOTE_URL_DOBROBOT }}" >> $GITHUB_ENV
+          else
+            echo "Invalid branch"
+            exit 1
+          fi
 
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: ${{ secrets.REMOTE_URL_ANON }}
+          branch: 'main'
+          git_remote_url: ${{ env.REMOTE_URL }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Push to dobrobot
-        uses: dokku/github-action@master
-        with:
-          git_remote_url: ${{ secrets.REMOTE_URL_DOBROBOT }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_host_key: ${{ secrets.SSH_HOST_KEY }}
