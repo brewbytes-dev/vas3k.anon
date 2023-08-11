@@ -19,6 +19,6 @@ jobs:
         uses: dokku/github-action@master
         with:
           branch: 'main'
-          git_remote_url: ${{ env.REMOTE_URL_DOBROBOT }}
+          git_remote_url: ${{ secrets.REMOTE_URL_DOBROBOT }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_host_key: ${{ secrets.SSH_HOST_KEY }}
