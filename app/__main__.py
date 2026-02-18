@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from json import JSONEncoder
+from typing import Any
 
 import sentry_sdk
 from aiogram import types
@@ -12,8 +13,23 @@ from app.handlers import errors
 from app.loader import dp, DEFAULT_USER_COMMANDS
 from aiogram_dialog import DialogRegistry
 
+
+TRANSIENT_POLLING_ERROR_PREFIXES = (
+    "Failed to fetch updates - TelegramNetworkError",
+    "Failed to fetch updates - TelegramServerError",
+    "Failed to fetch updates - TelegramRetryAfter",
+)
+
+
+def _before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any] | None:
+    message = event.get("message") or ""
+    if any(message.startswith(prefix) for prefix in TRANSIENT_POLLING_ERROR_PREFIXES):
+        return None
+    return event
+
+
 if config.SENTRY_DSN:
-    sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5)
+    sentry_sdk.init(config.SENTRY_DSN, traces_sample_rate=0.5, before_send=_before_send)
 
 logger = logging.getLogger(__name__)
 
