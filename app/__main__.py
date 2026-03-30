@@ -22,8 +22,18 @@ TRANSIENT_POLLING_ERROR_PREFIXES = (
 
 
 def _before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any] | None:
-    message = event.get("message") or ""
+    logentry = event.get("logentry") or {}
+    message = "\n".join(
+        part
+        for part in (
+            event.get("message") or "",
+            logentry.get("formatted") or logentry.get("message") or "",
+        )
+        if part
+    )
     if any(message.startswith(prefix) for prefix in TRANSIENT_POLLING_ERROR_PREFIXES):
+        return None
+    if "Cause exception while getting updates." in message and "Bad Gateway" in message:
         return None
     return event
 
