@@ -31,9 +31,18 @@ def _before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any] 
         )
         if part
     )
+    message_l = message.lower()
     if any(message.startswith(prefix) for prefix in TRANSIENT_POLLING_ERROR_PREFIXES):
         return None
-    if "Cause exception while getting updates." in message and "Bad Gateway" in message:
+    transient_polling_markers = (
+        "failed to fetch updates - telegramnetworkerror",
+        "failed to fetch updates - telegramservererror",
+        "failed to fetch updates - telegramretryafter",
+        "cause exception while getting updates.",
+        "bad gateway",
+        "request timeout error",
+    )
+    if any(marker in message_l for marker in transient_polling_markers):
         return None
     return event
 
