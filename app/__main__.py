@@ -32,6 +32,13 @@ def _before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any] 
         if part
     )
     message_l = message.lower()
+    exc_info = hint.get("exc_info") if hint else None
+    exc = exc_info[1] if exc_info and len(exc_info) > 1 else None
+    exc_name = exc.__class__.__name__.lower() if exc is not None else ""
+
+    if "failed to fetch updates" in message_l:
+        return None
+
     if any(message.startswith(prefix) for prefix in TRANSIENT_POLLING_ERROR_PREFIXES):
         return None
     transient_polling_markers = (
@@ -43,6 +50,8 @@ def _before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any] 
         "request timeout error",
     )
     if any(marker in message_l for marker in transient_polling_markers):
+        return None
+    if exc_name in {"telegramnetworkerror", "telegramservererror", "telegramretryafter", "timeouterror"}:
         return None
     return event
 
